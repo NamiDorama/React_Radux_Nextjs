@@ -1,0 +1,13 @@
+{
+  "title": "Title of the page",
+  "meta": [
+    {
+      "name": "description",
+      "content": "Some description test here"
+    },
+    {
+      "name": "keywords",
+      "content": "some, keywords, here"
+    }
+  ]
+}
