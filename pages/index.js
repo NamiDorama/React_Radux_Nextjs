@@ -2,8 +2,9 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
+import { connect } from 'react-redux'
 
-export default class extends React.Component {
+export class IndexPage extends React.Component {
   state = {
     address: ''
   };
@@ -94,3 +95,7 @@ export default class extends React.Component {
     )
   }
 }
+
+const Index = connect(({ address }) => address )(IndexPage);
+
+export default Index;
