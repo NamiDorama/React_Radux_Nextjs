@@ -1,5 +1,3 @@
-/* --== ASYNC ACTIONS ==-- */
+export const SET_META = 'Get meta for header';
 
-
-
-/* --== ACTIONS FOR REDUCER ==-- */
+export const setMeta = (data) => ({ type: SET_META, data });
