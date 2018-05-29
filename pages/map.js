@@ -1,12 +1,15 @@
 import MapWithADirectionsRenderer from '../components/DirectionMap';
+import { connect } from 'react-redux'
 
-export default class GetLocation extends React.Component {
+class GetLocation extends React.Component {
   state = {
     location: null,
     error: null
   };
 
   render() {
+      console.log(this.props);
+
     return (
       <div className="get-location">
         <h2>This is GetLocation</h2>
@@ -17,3 +20,5 @@ export default class GetLocation extends React.Component {
     );
   }
 }
+
+export default connect(({ meta, address }) => ({ meta: meta, address: address }))(GetLocation);

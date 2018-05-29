@@ -1,20 +1,27 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import Router from 'next/router'
 import fetch from 'isomorphic-unfetch'
+import { connect } from 'react-redux'
+import { setAddress, setMetaAsync } from '../actions'
 
-export default class extends React.Component {
+class Index extends React.Component {
   state = {
     address: ''
   };
 
-  static async getInitialProps() {
-    const res = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await res.json();
+  // static async getInitialProps() {
+  //   const res = await fetch('https://jsonplaceholder.typicode.com/users');
+  //   const data = await res.json();
+  //
+  //   return {
+  //     data: data[0]
+  //   }
+  // }
 
-    return {
-      data: data[0]
-    }
+  componentDidMount() {
+    this.props.dispatch(setMetaAsync());
   }
 
   changeInput = ({ target }) => {
@@ -22,25 +29,26 @@ export default class extends React.Component {
     this.setState({ address })
   };
 
-  setAddress = (e) => {
+  setUsersAddress = (e) => {
     e.preventDefault();
-    console.log('future action to set address to store')
+    this.props.dispatch(setAddress(this.state.address));
+    Router.push(`/map/${this.state.address}`);
   };
 
   render() {
-    const { data } = this.props;
+    const { meta } = this.props;
 
     return (
-      this.props &&
+      meta.length > 0 &&
       <div>
         <Head>
-          <title>{data.name}</title>
-          <meta name="description" content={data.username} />
-          <meta name="keywords" content={data.username} />
+          <title>Title</title>
+          <meta name="description" content="content" />
+          <meta name="keywords" content="content" />
         </Head>
         <div className="content">
           <h1>Привет, юзер!</h1>
-          <form onSubmit={(e) => this.setAddress(e)}>
+          <form onSubmit={(e) => this.setUsersAddress(e)}>
             <p>Введите страну, город, улицу</p>
             <p>Например: Украина, г. Харьков, ул. Гв.Широнинцев</p>
             <input
@@ -49,9 +57,11 @@ export default class extends React.Component {
               value={this.state.address}
               onChange={(e) => this.changeInput(e)}
             />
-            <Link href={`/map/${this.state.address}`} >
-              <button type="submit">Проложить маршрут</button>
-            </Link>
+            {/*<Link href={`/map/${this.state.address}`} >*/}
+              <button type="submit">
+                  Проложить маршрут
+              </button>
+            {/*</Link>*/}
           </form>
         </div>
 
@@ -90,7 +100,8 @@ export default class extends React.Component {
           `}
         </style>
       </div>
-
     )
   }
 }
+
+export default connect(({ meta }) => ({ meta: meta }))(Index);
