@@ -16,11 +16,12 @@ function* getMeta() {
     }
 }
 
-function* getLocation() {
+function* getLocation({ data }) {
     try {
-        const res = yield fetch('https://jsonplaceholder.typicode.com/posts');
-        const data = yield res.json();
-        yield put(setLocation(data))
+      const address = data.replace(/ /g, '+');
+      const res = yield fetch(`https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyBROMHKQ87U_eanb0KhruMPmlwAAmOsf0k&address=${address}&sensor=false&language=ru`);
+      const dataJson = yield res.json();
+      yield put(setLocation(dataJson))
     } catch (err) {
         console.error(err);
     }

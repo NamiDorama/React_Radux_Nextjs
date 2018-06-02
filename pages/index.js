@@ -1,24 +1,14 @@
 import React from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
 import Router from 'next/router'
-import fetch from 'isomorphic-unfetch'
 import { connect } from 'react-redux'
+import { transliterate } from 'transliteration'
 import { setAddress, setMetaAsync } from '../actions'
 
 class Index extends React.Component {
   state = {
     address: ''
   };
-
-  // static async getInitialProps() {
-  //   const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  //   const data = await res.json();
-  //
-  //   return {
-  //     data: data[0]
-  //   }
-  // }
 
   componentDidMount() {
     this.props.dispatch(setMetaAsync());
@@ -31,8 +21,14 @@ class Index extends React.Component {
 
   setUsersAddress = (e) => {
     e.preventDefault();
-    this.props.dispatch(setAddress(this.state.address));
-    Router.push(`/map/${this.state.address}`);
+    const address = this.state.address;
+    this.props.dispatch(setAddress(address));
+
+    const href = '/map';
+    const addressForUrl = `${transliterate(address).replace(/\W+/g, '_').toLowerCase()}`;
+    const as = `/map/${addressForUrl}`;
+
+    Router.push(href, as);
   };
 
   render() {
@@ -42,26 +38,24 @@ class Index extends React.Component {
       meta.length > 0 &&
       <div>
         <Head>
-          <title>Title</title>
-          <meta name="description" content="content" />
-          <meta name="keywords" content="content" />
+          <title>{meta[0].company.name}</title>
+          <meta name="description" content={meta[0].company.catchPhrase} />
+          <meta name="keywords" content={meta[0].company.bs} />
         </Head>
         <div className="content">
           <h1>Привет, юзер!</h1>
           <form onSubmit={(e) => this.setUsersAddress(e)}>
             <p>Введите страну, город, улицу</p>
-            <p>Например: Украина, г. Харьков, ул. Гв.Широнинцев</p>
+            <p>Например: Украина, г. Харьков, ул. Сумская, 18</p>
             <input
               type="text"
               placeholder="Введите страну, город, улицу"
               value={this.state.address}
-              onChange={(e) => this.changeInput(e)}
+              onChange={this.changeInput}
             />
-            {/*<Link href={`/map/${this.state.address}`} >*/}
-              <button type="submit">
-                  Проложить маршрут
-              </button>
-            {/*</Link>*/}
+            <button type="submit">
+              Проложить маршрут
+            </button>
           </form>
         </div>
 

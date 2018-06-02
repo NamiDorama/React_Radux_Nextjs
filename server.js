@@ -10,15 +10,11 @@ app.prepare()
     const server = express();
 
     server.get('/map/:address', (req, res) => {
-      const actualPage = '/map';
-      const queryParams = { address: req.params.address };
-      app.render(req, res, actualPage, queryParams)
+      res.redirect('/');
     });
 
     server.get('/map/', (req, res) => {
-      const actualPage = '/map';
-      const queryParams = { address: req.params.address };
-      app.render(req, res, actualPage, queryParams)
+      res.redirect('/');
     });
 
     server.get('*', (req, res) => {

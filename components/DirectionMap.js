@@ -9,7 +9,7 @@ const { compose, withProps, lifecycle } = require("recompose");
 
 const MapWithADirectionsRenderer = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg" +
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBROMHKQ87U_eanb0KhruMPmlwAAmOsf0k" +
     "&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%`, width: `70%` }} />,
     containerElement: <div style={{ height: `500px` }} />,
@@ -47,16 +47,29 @@ const MapWithADirectionsRenderer = compose(
       <DirectionsRenderer
         directions={props.directions}
       />
-      {/*<Marker*/}
-        {/*position={{ lat: 53.9040434, lng: 27.5542313 }}*/}
-        {/*defaultIcon="/static/start-marker.png"*/}
-      {/*/>*/}
-      {/*<Marker*/}
-        {/*position={{ lat: props.destination.lat, lng: props.destination.lng }}*/}
-        {/*defaultIcon="/static/end-marker.png"*/}
-      {/*/>*/}
+      <Marker
+        position={{ lat: 53.9040434, lng: 27.5542313 }}
+        defaultIcon="/static/start-marker.png"
+      />
+      <Marker
+        position={{ lat: props.destination.lat, lng: props.destination.lng }}
+        defaultIcon="/static/end-marker.png"
+      />
     </React.Fragment>
     }
+    {/*{*/}
+      {/*props.directions &&*/}
+      {/*<React.Fragment>*/}
+        {/*<Marker*/}
+          {/*position={{ lat: 53.9040434, lng: 27.5542313 }}*/}
+          {/*defaultIcon="/static/start-marker.png"*/}
+        {/*/>*/}
+        {/*<Marker*/}
+          {/*position={{ lat: props.destination.lat, lng: props.destination.lng }}*/}
+          {/*defaultIcon="/static/end-marker.png"*/}
+        {/*/>*/}
+      {/*</React.Fragment>*/}
+    {/*}*/}
   </GoogleMap>
 );
 
