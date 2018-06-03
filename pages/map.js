@@ -1,7 +1,7 @@
 import MapWithADirectionsRenderer from '../components/DirectionMap';
 import { connect } from 'react-redux'
 import Head from 'next/head'
-import { setMetaAsync, getLocationAsync } from '../actions'
+import { setMetaAsync } from '../actions'
 
 class GetLocation extends React.Component {
   state = {
@@ -10,18 +10,17 @@ class GetLocation extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(setMetaAsync());
-    this.props.dispatch(getLocationAsync(this.props.address));
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.location !== prevState.location) {
-      return { location: nextProps.location.results[0].geometry.location };
+      return { location: nextProps.location };
     }
     return null;
   }
 
   render() {
-    const { meta } = this.props;
+    const { meta, error } = this.props;
     const { location } = this.state;
 
     return (
@@ -32,18 +31,35 @@ class GetLocation extends React.Component {
           <meta name="description" content={meta[1].company.catchPhrase} />
           <meta name="keywords" content={meta[1].company.bs} />
         </Head>
-        <h2>Ваш маршрут</h2>
+        <h2>Geolocation</h2>
 
-        {Object.keys(location).length !== 0 ?
-
-        <MapWithADirectionsRenderer
-          destination={ {lat: location.lat, lng: location.lng} }
-        /> :
-        <div>Something was wrong. Please, try again</div>
+        {error ?
+          <div>
+            <p>Something was wrong.</p>
+            <p className="error">{error}</p>
+            <p>Please, reload the page and try again</p>
+          </div>
+          : location.results &&
+          <MapWithADirectionsRenderer
+            destination={location.results[0].geometry.location}
+          />
         }
+
+        <style jsx>
+          {`
+            .get-location {
+              margin: 20px auto;
+              max-width: 1024px;
+              text-align: center;
+            }
+            .error {
+              color: red;
+            }
+          `}
+        </style>
       </div>
     );
   }
 }
 
-export default connect(({ meta, address, location }) => ({ meta: meta, address: address, location: location }))(GetLocation);
+export default connect(({ meta, error, location }) => ({ meta: meta, error: error, location: location }))(GetLocation);

@@ -6,14 +6,16 @@ import {
   Marker
 } from "react-google-maps";
 const { compose, withProps, lifecycle } = require("recompose");
+import { connect } from 'react-redux'
+import { setError } from '../actions'
 
 const MapWithADirectionsRenderer = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBROMHKQ87U_eanb0KhruMPmlwAAmOsf0k" +
     "&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `100%`, width: `70%` }} />,
+    loadingElement: <div style={{ height: `100%`, width: `100%` }} />,
     containerElement: <div style={{ height: `500px` }} />,
-    mapElement: <div style={{ height: `100%`, width: `70%`, margin: `20px auto` }} />,
+    mapElement: <div style={{ height: `100%`, width: `100%`, margin: `20px auto` }} />,
   }),
   withScriptjs,
   withGoogleMap,
@@ -32,7 +34,7 @@ const MapWithADirectionsRenderer = compose(
             destination: this.props.destination
           });
         } else {
-          console.error(`error fetching directions ${result}`);
+          this.props.dispatch(setError('Error fetching directions'))
         }
       });
     }
@@ -57,20 +59,7 @@ const MapWithADirectionsRenderer = compose(
       />
     </React.Fragment>
     }
-    {/*{*/}
-      {/*props.directions &&*/}
-      {/*<React.Fragment>*/}
-        {/*<Marker*/}
-          {/*position={{ lat: 53.9040434, lng: 27.5542313 }}*/}
-          {/*defaultIcon="/static/start-marker.png"*/}
-        {/*/>*/}
-        {/*<Marker*/}
-          {/*position={{ lat: props.destination.lat, lng: props.destination.lng }}*/}
-          {/*defaultIcon="/static/end-marker.png"*/}
-        {/*/>*/}
-      {/*</React.Fragment>*/}
-    {/*}*/}
   </GoogleMap>
 );
 
-export default MapWithADirectionsRenderer;
+export default connect()(MapWithADirectionsRenderer);

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Router from 'next/router'
 import { connect } from 'react-redux'
 import { transliterate } from 'transliteration'
-import { setAddress, setMetaAsync } from '../actions'
+import { setAddress, setMetaAsync, setError, getLocationAsync } from '../actions'
 
 class Index extends React.Component {
   state = {
@@ -12,6 +12,7 @@ class Index extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(setMetaAsync());
+    this.props.dispatch(setError(null));
   }
 
   changeInput = ({ target }) => {
@@ -23,6 +24,7 @@ class Index extends React.Component {
     e.preventDefault();
     const address = this.state.address;
     this.props.dispatch(setAddress(address));
+    this.props.dispatch(getLocationAsync(address));
 
     const href = '/map';
     const addressForUrl = `${transliterate(address).replace(/\W+/g, '_').toLowerCase()}`;
@@ -59,11 +61,12 @@ class Index extends React.Component {
           </form>
         </div>
 
-        <style jsx>
-          {`
+        <style jsx> {
+          `
             .content {
               margin: 20px auto;
               max-width: 1024px;
+              text-align: center;
             }
             h1 {
               color: red
@@ -81,7 +84,7 @@ class Index extends React.Component {
               display: block;
               width: 200px;
               padding: 5px 15px;
-              margin: 10px 0;
+              margin: 10px auto;
               border: 1px solid #757575;
               border-radius: 4px;
               background-color: white;
